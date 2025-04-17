@@ -1,0 +1,241 @@
+.center-panel {
+  flex: 2;
+  padding: 20px;
+  background: #fafafa;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #43a047;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.purchases-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.purchases-table thead {
+  background-color: #2c3e50;
+  color: white;
+  text-align: left;
+}
+
+.purchases-table th,
+.purchases-table td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.purchases-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.purchases-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.action-btn {
+  margin: 0 4px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.view {
+  background-color: #2196f3;
+  color: white;
+}
+
+.view:hover {
+  background-color: #1976d2;
+}
+
+.edit {
+  background-color: #ff9800;
+  color: white;
+}
+
+.edit:hover {
+  background-color: #fb8c00;
+}
+
+.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #e53935;
+}
+
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-btn {
+  background-color: #424242;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.page-btn:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 15px;
+}
+
+.tab {
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-weight: bold;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background-color: #f5f5f5;
+}
+
+.tab.active {
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+  background-color: #f9f9f9;
+}
+
+.summary-panel {
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+
+
+.right-panel {
+  background: #fafafa;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.card h4 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.card p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.insight-section {
+  margin-bottom: 18px;
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.insight-section h4 {
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: #444;
+}
+
+.suggestion-box {
+  background: #fffdf2;
+  padding: 12px;
+  border-left: 4px solid #ffcc00;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.suggestion-box h4 {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #b38f00;
+}
+
+.suggestion-box ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.suggestion-box li {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+
+
+
+.invoice-btn {
+  background-color: #6f42c1;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
