@@ -10,12 +10,13 @@ const AddPurchaseModal = ({ onClose, onSave }) => {
   const handleSubmit = () => {
     if (!item || !quantity || !price) return;
     const newPurchase = {
-      id: Date.now(),
+      id: Date.now().toString(),
       item,
-      quantity,
-      price,
+      quantity: parseInt(quantity),     
+    price: parseFloat(price),  
       description,
     };
+    console.log("📦 New Purchase (before send):", newPurchase);
     onSave(newPurchase);
   };
 

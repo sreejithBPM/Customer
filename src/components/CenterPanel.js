@@ -5,6 +5,8 @@ import ViewPurchaseModal from "./ViewPurchaseModal";
 import EditPurchaseModal from "./EditPurchaseModal";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { addPurchase, updatePurchase, deletePurchase } from "../services/CustomerService";
+import Toast from "./Toast";
 const ITEMS_PER_PAGE = 5;
 
 const CenterPanel = ({ customer, updatePurchases }) => {
@@ -15,31 +17,54 @@ const CenterPanel = ({ customer, updatePurchases }) => {
   const [toastMessage, setToastMessage] = useState("");
   const [activeTab, setActiveTab] = useState("Purchases");
 
-  if (!customer) return <div className="panel center-panel">Select a customer to see details.</div>;
-
+  if (!customer) {
+    return <div className="center-panel"><p>Select a customer to view details.</p></div>;
+  }
+  
+  if (!customer.purchases || customer.purchases.length === 0) {
+    return <div className="center-panel"><p>No purchases found for this customer.</p></div>;
+  }
   const totalPages = Math.ceil(customer.purchases.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentPurchases = customer.purchases.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const handleAddPurchase = (newPurchase) => {
-    updatePurchases(customer.id, [...customer.purchases, newPurchase]);
-    setShowAddModal(false);
-    setToastMessage("Purchase added successfully!");
+  const handleAddPurchase = async (newPurchase) => {
+    try {
+      const created = await addPurchase(customer.id, newPurchase);
+      updatePurchases(customer.id, [...customer.purchases, created]);
+      setShowAddModal(false);
+      setToastMessage("Purchase added successfully!");
+    } catch (err) {
+      console.error(err);
+      setToastMessage("Failed to add purchase.Please check your connection.");
+    }
   };
 
-  const handleEditPurchase = (updatedPurchase) => {
-    const updated = customer.purchases.map((p) =>
-      p.id === updatedPurchase.id ? updatedPurchase : p
-    );
-    updatePurchases(customer.id, updated);
-    setEditPurchase(null);
-    setToastMessage("Purchase updated successfully!");
+  const handleEditPurchase = async (updatedPurchase) => {
+    try {
+      const result = await updatePurchase(customer.id, updatedPurchase.id, updatedPurchase);
+      const updated = customer.purchases.map((p) =>
+        p.id === updatedPurchase.id ? result : p
+      );
+      updatePurchases(customer.id, updated);
+      setEditPurchase(null);
+      setToastMessage("Purchase updated successfully!");
+    } catch (err) {
+      console.error(err);
+      setToastMessage("Failed to update purchase.");
+    }
   };
 
-  const handleDeletePurchase = (id) => {
-    const updated = customer.purchases.filter((p) => p.id !== id);
-    updatePurchases(customer.id, updated);
-    setToastMessage("Purchase deleted.");
+  const handleDeletePurchase = async (id) => {
+    try {
+      await deletePurchase(customer.id, id);
+      const updated = customer.purchases.filter((p) => p.id !== id);
+      updatePurchases(customer.id, updated);
+      setToastMessage("Purchase deleted.");
+    } catch (err) {
+      console.error(err);
+      setToastMessage("Failed to delete purchase.");
+    }
   };
   const downloadInvoice = (purchase) => {
     const doc = new jsPDF();
@@ -168,6 +193,8 @@ const CenterPanel = ({ customer, updatePurchases }) => {
         </div>
       )}
 
+       {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage("")} />}
+
       {/* Invoices Tab */}
       {activeTab === "Invoices" && (
         <>
@@ -224,6 +251,8 @@ const CenterPanel = ({ customer, updatePurchases }) => {
       )}
 
       {/* Toast */}
+
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage("")} />}
 
       {/* Modals */}
       {showAddModal && (

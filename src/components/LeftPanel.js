@@ -2,19 +2,23 @@ import React, { useState } from "react";
 import "../styles/LeftPanel.css";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
-const LeftPanel = ({ customers, onSelect, selectedId }) => {
+const LeftPanel = ({ customers, onSelect, selectedId ,onDelete, onAddCustomer,onEditCustomer,  }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSelectCustomer = (id) => {
     onSelect(id);
   };
 
+  
+
   const handleEditCustomer = (id) => {
     console.log("Edit customer", id); // Implement edit functionality
   };
 
   const handleDeleteCustomer = (id) => {
-    console.log("Delete customer", id); // Implement delete functionality
+    if (window.confirm("Are you sure you want to delete this customer?")) {
+      onDelete(id);
+    }
   };
 
   const filteredCustomers = customers.filter((customer) =>
@@ -30,6 +34,7 @@ const LeftPanel = ({ customers, onSelect, selectedId }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <button className="add-btn" onClick={onAddCustomer}>+ Add</button>
       </div>
 
       <div className="customer-list">
@@ -56,7 +61,7 @@ const LeftPanel = ({ customers, onSelect, selectedId }) => {
               <span className="role-badge">{customer.role}</span>
             </div>
             <div className="customer-actions">
-              <FaEdit onClick={() => handleEditCustomer(customer.id)} className="action-icon edit-icon" />
+              <FaEdit onClick={(e) => { e.stopPropagation(); onEditCustomer(customer);}} className="action-icon edit-icon" />
               <FaTrashAlt onClick={() => handleDeleteCustomer(customer.id)} className="action-icon delete-icon" />
             </div>
           </div>

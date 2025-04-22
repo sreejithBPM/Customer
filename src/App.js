@@ -1,13 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LeftPanel from "./components/LeftPanel";
 import CenterPanel from "./components/CenterPanel";
 import RightPanel from "./components/RightPanel";
-import mockCustomers from "./data/mockCustomers";
+//import mockCustomers from "./data/mockCustomers";
 import "./App.css";
+import { fetchCustomers,deleteCustomer , addCustomer,updateCustomer,} from "./services/CustomerService";
+import AddCustomerModal from "./components/AddCustomerModal";
+import EditCustomerModal from "./components/EditCustomerModal";
 
 function App() {
-  const [customers, setCustomers] = useState(mockCustomers);
+  const [customers, setCustomers] = useState([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editCustomerData, setEditCustomerData] = useState(null);
+
+  useEffect(() => {
+    loadCustomers();
+  }, []);
+
+  const loadCustomers = async () => {
+    try {
+      const data = await fetchCustomers(); // API call
+      setCustomers(data.customers); // Make sure your API returns { customers: [...] }
+    } catch (error) {
+      console.error("Error loading customers:", error);
+    }
+  };
+
+
+  const handleAddCustomer = async (newCustomer) => {
+    try {
+      const saved = await addCustomer(newCustomer);
+      setCustomers(prev => [...prev, saved]);
+      setShowAddModal(false);
+    } catch (err) {
+      console.error("Error adding customer:", err);
+    }
+  };
+
+  const handleEditCustomer = (customer) => {
+    setEditCustomerData(customer);
+  };
+
+  const handleUpdateCustomer = async (id, updatedCustomer) => {
+    try {
+      const saved = await updateCustomer(id, updatedCustomer);
+      setCustomers(prev => prev.map(c => c.id === id ? saved : c));
+      setEditCustomerData(null);
+    } catch (err) {
+      console.error("Error updating customer:", err);
+    }
+  };
+
+
+  const handleDeleteCustomer = async (id) => {
+    try {
+      await deleteCustomer(id);
+      setCustomers(prev => prev.filter(c => c.id !== id)); // remove from UI
+      if (selectedCustomerId === id) setSelectedCustomerId(null); // reset selected
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
 
   const selectedCustomer = customers.find(c => c.id === selectedCustomerId);
 
@@ -25,12 +79,24 @@ function App() {
         customers={customers}
         selectedId={selectedCustomerId}
         onSelect={setSelectedCustomerId}
+        onAddCustomer={() => setShowAddModal(true)}
+        onEditCustomer={handleEditCustomer}
+        onDelete={handleDeleteCustomer} 
       />
       <CenterPanel
         customer={selectedCustomer}
         updatePurchases={updatePurchases}
       />
       <RightPanel customer={selectedCustomer} />
+
+      {showAddModal && <AddCustomerModal onClose={() => setShowAddModal(false)} onSave={handleAddCustomer} />}
+      {editCustomerData && (
+        <EditCustomerModal
+          customer={editCustomerData}
+          onClose={() => setEditCustomerData(null)}
+          onSave={handleUpdateCustomer}
+        />
+      )}
     </div>
   );
 }
