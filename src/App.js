@@ -20,8 +20,14 @@ function App() {
 
   const loadCustomers = async () => {
     try {
-      const data = await fetchCustomers(); // API call
-      setCustomers(data.customers); // Make sure your API returns { customers: [...] }
+      const data = await fetchCustomers();
+      console.log("Fetched data:", data);
+      
+      if (data?.customers) {
+        setCustomers(data.customers);
+      } else {
+        console.error("API returned unexpected structure:", data);
+      }
     } catch (error) {
       console.error("Error loading customers:", error);
     }
@@ -29,8 +35,10 @@ function App() {
 
 
   const handleAddCustomer = async (newCustomer) => {
+    console.log("Attempting to add customer:", newCustomer); // log input
     try {
       const saved = await addCustomer(newCustomer);
+      console.log("Customer added successfully:", saved); // log response
       setCustomers(prev => [...prev, saved]);
       setShowAddModal(false);
     } catch (err) {
@@ -43,8 +51,12 @@ function App() {
   };
 
   const handleUpdateCustomer = async (id, updatedCustomer) => {
+    console.log(`Updating customer with ID ${id}:`, updatedCustomer); // log input
+  
     try {
       const saved = await updateCustomer(id, updatedCustomer);
+      console.log("Customer updated successfully:", saved); // log response
+  
       setCustomers(prev => prev.map(c => c.id === id ? saved : c));
       setEditCustomerData(null);
     } catch (err) {

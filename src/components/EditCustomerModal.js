@@ -1,31 +1,72 @@
 import React, { useState, useEffect } from "react";
-import "../styles/CustomerModal.css";
-const EditCustomerModal = ({ onClose, onSave, customer }) => {
-  const [formData, setFormData] = useState({ ...customer });
+import "../styles/CustomerModal.css"; // ensure this file exists
+
+const EditCustomerModal = ({ customer, onClose, onSave }) => {
+  const [form, setForm] = useState({
+    id: customer.id,
+    name: customer.name || "",
+    email: customer.email || "",
+    phone: customer.phone || "",
+    purchases: customer.purchases || []
+  });
 
   useEffect(() => {
-    setFormData({ ...customer });
+    setForm({
+      id: customer.id,
+      name: customer.name || "",
+      email: customer.email || "",
+      phone: customer.phone || "",
+      purchases: customer.purchases || []
+    });
   }, [customer]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = () => {
-    onSave(formData.id, formData);
+    const updatedCustomer = {
+      ...form,
+      purchases: form.purchases || []
+    };
+    console.log("Updating customer:", updatedCustomer);
+    onSave(form.id, updatedCustomer);
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
+    <div className="modal-overlay">
+      <div className="modal-content">
         <h2>Edit Customer</h2>
-        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} />
+        <div className="modal-form">
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+          />
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <label>Phone:</label>
+          <input
+            type="text"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+          />
+        </div>
         <div className="modal-actions">
-          <button onClick={handleSubmit}>Update</button>
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          <button className="save-button" onClick={handleSubmit}>Save</button>
+          <button className="cancel-button" onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>

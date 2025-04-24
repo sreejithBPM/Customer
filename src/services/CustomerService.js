@@ -11,6 +11,8 @@ export const deleteCustomer = async (id) => {
   };
 
   export const addCustomer = async (newCustomer) => {
+    console.log("Sending POST to AddCustomer:", newCustomer);
+  
     const response = await fetch(`${API_BASE_URL}/AddCustomer`, {
       method: "POST",
       headers: {
@@ -23,24 +25,30 @@ export const deleteCustomer = async (id) => {
       throw new Error("Failed to add customer");
     }
   
-    return await response.json();
+    const data = await response.json();
+    console.log("AddCustomer API response:", data);
+    return data;
   };
   
   export const updateCustomer = async (id, updatedCustomer) => {
-    const response = await fetch(`${API_BASE_URL}/UpdateCustomer/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedCustomer),
-    });
-  
-    if (!response.ok) {
-      throw new Error("Failed to update customer");
-    }
-  
-    return await response.json();
-  };
+  console.log(`Sending PUT to UpdateCustomer/${id}:`, updatedCustomer);
+
+  const response = await fetch(`${API_BASE_URL}/UpdateCustomer/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedCustomer),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update customer");
+  }
+
+  const data = await response.json();
+  console.log("UpdateCustomer API response:", data);
+  return data;
+};
 
   
 export const fetchCustomers = async () => {

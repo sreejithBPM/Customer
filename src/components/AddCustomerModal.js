@@ -1,32 +1,37 @@
 import React, { useState } from "react";
-import "../styles/CustomerModal.css";
+import "../styles/Modal.css";
 
 const AddCustomerModal = ({ onClose, onSave }) => {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
+    purchases : []
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    onSave(formData);
-  };
+ const handleSubmit = () => {
+  console.log("Submitting new customer:", form);
+  if (form.name && form.email && form.phone) {
+    onSave(form);
+  } else {
+    alert("All fields are required.");
+  }
+};
 
   return (
-    <div className="modal-backdrop">
+    <div className="modal-overlay">
       <div className="modal">
-        <h2>Add Customer</h2>
-        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} />
+        <h3>Add New Customer</h3>
+        <input name="name" placeholder="Name" onChange={handleChange} value={form.name} />
+        <input name="email" placeholder="Email" onChange={handleChange} value={form.email} />
+        <input name="phone" placeholder="Phone" onChange={handleChange} value={form.phone} />
         <div className="modal-actions">
-          <button onClick={handleSubmit}>Add</button>
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
         </div>
       </div>
     </div>

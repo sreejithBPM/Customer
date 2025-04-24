@@ -11,18 +11,26 @@ const RightPanel = ({ customer }) => {
     );
   }
 
-  const totalPurchases = customer.purchases.length;
-  const totalSpent = customer.purchases.reduce(
-    (sum, p) => sum + p.price * p.quantity,
-    0
-  );
-  const totalQty = customer.purchases.reduce((sum, p) => sum + p.quantity, 0);
+  const purchases = customer.purchases;
+
+  if (purchases.length === 0) {
+    return (
+      <div className="panel right-panel">
+        <h3>Insights</h3>
+        <p>No purchases available for this customer.</p>
+      </div>
+    );
+  }
+
+  const totalPurchases = purchases.length;
+  const totalSpent = purchases.reduce((sum, p) => sum + p.price * p.quantity, 0);
+  const totalQty = purchases.reduce((sum, p) => sum + p.quantity, 0);
   const avgPurchaseValue = (totalSpent / totalPurchases).toFixed(2);
 
-  const lastPurchase = customer.purchases[customer.purchases.length - 1];
-  const topItem = customer.purchases.reduce((acc, curr) => {
-    return acc.quantity > curr.quantity ? acc : curr;
-  });
+  const lastPurchase = purchases[purchases.length - 1];
+  const topItem = purchases.reduce((acc, curr) =>
+    acc.quantity > curr.quantity ? acc : curr
+  );
 
   return (
     <div className="panel right-panel">
