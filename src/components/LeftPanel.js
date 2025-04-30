@@ -34,7 +34,7 @@ const LeftPanel = ({ customers, onSelect, selectedId ,onDelete, onAddCustomer,on
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="add-btn" onClick={onAddCustomer}>+ Add</button>
+        <button className="add-btn" onClick={onAddCustomer}>+ Add Customer</button>
       </div>
 
       <div className="customer-list">

@@ -17,17 +17,6 @@ const CenterPanel = ({ customer, updatePurchases }) => {
   const [toastMessage, setToastMessage] = useState("");
   const [activeTab, setActiveTab] = useState("Purchases");
 
-  if (!customer) {
-    return <div className="center-panel"><p>Select a customer to view details.</p></div>;
-  }
-  
-  if (!customer.purchases || customer.purchases.length === 0) {
-    return <div className="center-panel"><p>No purchases found for this customer.</p></div>;
-  }
-  const totalPages = Math.ceil(customer.purchases.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentPurchases = customer.purchases.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
   const handleAddPurchase = async (newPurchase) => {
     try {
       const created = await addPurchase(customer.id, newPurchase);
@@ -39,6 +28,38 @@ const CenterPanel = ({ customer, updatePurchases }) => {
       setToastMessage("Failed to add purchase.Please check your connection.");
     }
   };
+
+  if (!customer) {
+    return <div className="center-panel"><p>Select a customer to view details.</p></div>;
+  }
+  
+  if (!customer.purchases || customer.purchases.length === 0) {
+    return (
+      <div className="panel center-panel">
+        <div className="panel-header">
+          <h3>{customer.name}'s Purchases</h3>
+          <button className="add-button" onClick={() => setShowAddModal(true)}>Add First Purchase</button>
+        </div>
+        <p>No purchases found for this customer.</p>
+  
+        {/* Toast */}
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage("")} />}
+  
+        {/* Add Modal */}
+        {showAddModal && (
+          <AddPurchaseModal
+            onClose={() => setShowAddModal(false)}
+            onSave={handleAddPurchase}
+          />
+        )}
+      </div>
+    );
+  }
+  const totalPages = Math.ceil(customer.purchases.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentPurchases = customer.purchases.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  
 
   const handleEditPurchase = async (updatedPurchase) => {
     try {

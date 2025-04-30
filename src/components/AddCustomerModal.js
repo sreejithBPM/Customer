@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Modal.css";
-
+import "../styles/CustomerModal.css"; // ensure this file exists
 const AddCustomerModal = ({ onClose, onSave }) => {
   const [form, setForm] = useState({
     name: "",
@@ -24,14 +23,37 @@ const AddCustomerModal = ({ onClose, onSave }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal-content">
         <h3>Add New Customer</h3>
-        <input name="name" placeholder="Name" onChange={handleChange} value={form.name} />
-        <input name="email" placeholder="Email" onChange={handleChange} value={form.email} />
-        <input name="phone" placeholder="Phone" onChange={handleChange} value={form.phone} />
+        
+
+        <div className="modal-form">
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+          />
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <label>Phone:</label>
+          <input
+            type="text"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+          />
+        </div>
         <div className="modal-actions">
-          <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+          
           <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
+          <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>

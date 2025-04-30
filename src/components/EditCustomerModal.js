@@ -65,8 +65,8 @@ const EditCustomerModal = ({ customer, onClose, onSave }) => {
           />
         </div>
         <div className="modal-actions">
-          <button className="save-button" onClick={handleSubmit}>Save</button>
-          <button className="cancel-button" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
+          <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>
